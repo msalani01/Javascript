@@ -161,4 +161,4 @@ const inputTexto = document.getElementById("texto");
 
     }
 
-  }
+  
