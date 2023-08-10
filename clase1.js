@@ -54,6 +54,22 @@ function evaluarAptitud() {
   }
 }
 
+// Función para guardar los pacientes evaluados en el Local Storage
+function guardarPacientesEnLocalStorage() {
+  localStorage.setItem("pacientesEvaluados", JSON.stringify(pacientesEvaluados));
+}
+
+// Función para cargar los pacientes evaluados desde el Local Storage
+function cargarPacientesDesdeLocalStorage() {
+  const pacientesGuardados = localStorage.getItem("pacientesEvaluados");
+  if (pacientesGuardados) {
+    pacientesEvaluados.push(...JSON.parse(pacientesGuardados));
+  }
+}
+
+// Llama a la función de cargar al inicio para cargar los datos existentes
+cargarPacientesDesdeLocalStorage();
+
 function evaluarPaciente() {
   var nombre = document.getElementById("nombre").value;
   if (nombre.trim() === "") {
@@ -91,6 +107,7 @@ function evaluarPaciente() {
   }
   
   actualizarListaPacientes();
+  cargarPacientesDesdeLocalStorage();
 }
 
 function obtenerFechaActual() {
@@ -114,8 +131,18 @@ function actualizarListaPacientes() {
 }
 
 function verPromedio() {
-  // No hay necesidad de calcular el promedio con un solo paciente
-  alert("Solo hay un paciente evaluado.");
+  if (pacientesEvaluados.length === 0) {
+    alert("No hay pacientes evaluados para calcular el promedio.");
+    return;
+  }
+
+  let totalEtapasAprobadas = 0;
+  pacientesEvaluados.forEach((paciente) => {
+    totalEtapasAprobadas += paciente.etapasAprobadas.length;
+  });
+
+  const promedio = totalEtapasAprobadas / pacientesEvaluados.length;
+  alert(`Promedio de etapas aprobadas por paciente: ${promedio.toFixed(2)}`);
 }
 
 function resetearDatos() {
@@ -123,10 +150,13 @@ function resetearDatos() {
   paciente.etapaActual = 0;
   paciente.aptitud = "";
   paciente.etapasAprobadas = [];
+  
   document.getElementById("nombre").value = "";
   document.getElementById("presionArterial").value = "";
   document.getElementById("frecuenciaCardiaca").value = "";
+
   actualizarListaPacientes();
+  cargarPacientesDesdeLocalStorage();
 }
 
 function filtrarPorEtapa() {
@@ -149,16 +179,11 @@ function filtrarPorEtapa() {
   });
 }
 
+function  
+
 const inputTexto = document.getElementById("texto");
-
-    // Agregar el evento de teclado al elemento inputTexto
-    inputTexto.addEventListener("keydown", function(event) {
-      // Verificar si se presionó la tecla Enter (código 13)
-      if (event.keyCode === 13) {
-        // Llamar a la función evaluarPaciente()
-        evaluarPaciente();
-      }
-
-    }
-
-  
+inputTexto.addEventListener("keydown", function(event) {
+  if (event.keyCode === 13) {
+    evaluarPaciente();
+  }
+});
