@@ -38,21 +38,19 @@ let paciente = {
 };
 
 function evaluarAptitud() {
-  const limiteEtapa = limitesAptitud[etapas[paciente.etapaActual]];
-  paciente.presionArterial = Math.round(paciente.presionArterial);
-  paciente.frecuenciaCardiaca = Math.round(paciente.frecuenciaCardiaca);
+  const { etapaActual, presionArterial, frecuenciaCardiaca } = paciente;
+  const limiteEtapa = limitesAptitud[etapas[etapaActual]];
+  
+  const presionArterialRedondeada = Math.round(presionArterial);
+  const frecuenciaCardiacaRedondeada = Math.round(frecuenciaCardiaca);
 
-  if (
-    paciente.presionArterial >= limiteEtapa.minPA &&
-    paciente.presionArterial <= limiteEtapa.maxPA &&
-    paciente.frecuenciaCardiaca >= limiteEtapa.minFC &&
-    paciente.frecuenciaCardiaca <= limiteEtapa.maxFC
-  ) {
-    return "apto";
-  } else {
-    return "no apto";
-  }
+  const esApto =
+    presionArterialRedondeada >= limiteEtapa.minPA && presionArterialRedondeada <= limiteEtapa.maxPA &&
+    frecuenciaCardiacaRedondeada >= limiteEtapa.minFC && frecuenciaCardiacaRedondeada <= limiteEtapa.maxFC;
+
+  return esApto ? "apto" : "no apto";
 }
+
 
 // Función para guardar los pacientes evaluados en el Local Storage
 function guardarPacientesEnLocalStorage() {
@@ -147,10 +145,9 @@ function verPromedio() {
 }
 
 function resetearDatos() {
-  paciente.nombre = "";
-  paciente.etapaActual = 0;
-  paciente.aptitud = "";
-  paciente.etapasAprobadas = [];
+  paciente = {
+    ...paciente, // Copia todas las propiedades del pacienteInicial
+  };
   
   document.getElementById("nombre").value = "";
   document.getElementById("presionArterial").value = "";
