@@ -107,6 +107,7 @@ function evaluarPaciente() {
   }
   
   actualizarListaPacientes();
+  guardarPacientesEnLocalStorage()
   cargarPacientesDesdeLocalStorage();
 }
 
