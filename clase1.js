@@ -179,9 +179,9 @@ function filtrarPorEtapa() {
   });
 }
 
-function  
+ 
 
-const inputTexto = document.getElementById("texto");
+const inputTexto = document.getElementById("nombre");
 inputTexto.addEventListener("keydown", function(event) {
   if (event.keyCode === 13) {
     evaluarPaciente();
