@@ -65,6 +65,8 @@ function cargarPacientesDesdeLocalStorage() {
   }
 }
 
+localStorage.clear()
+
 // Llama a la función de cargar al inicio para cargar los datos existentes
 cargarPacientesDesdeLocalStorage();
 
@@ -89,6 +91,7 @@ function evaluarPaciente() {
   paciente.aptitud = evaluarAptitud();
   paciente.fecha = obtenerFechaActual();
 
+
   alert("Aptitud del paciente en la etapa " + etapas[paciente.etapaActual] + ": " + paciente.aptitud);
 
   if (paciente.aptitud === "apto") {
@@ -99,14 +102,18 @@ function evaluarPaciente() {
 
   if (paciente.etapaActual >= etapas.length) {
     alert("¡Felicitaciones! Ha pasado todas las etapas.");
-    paciente.etapaActual = 0; // Reiniciar etapa para futuros pacientes
-    pacientesEvaluados.push({ nombre: paciente.nombre, etapasAprobadas: paciente.etapasAprobadas.slice() });
-    paciente.etapasAprobadas = []; // Reiniciar etapas aprobadas para futuros pacientes
+    Toastify({
+      text: "Aprobado!" ,
+      duration: 3000
+
+    }).showToast();
+    paciente.etapaActual = 0;
+    pacientesEvaluados.push({ nombre: paciente.nombre, etapasAprobadas.slice()});
+    paciente.etapasAprobadas = [;]
   }
   
   actualizarListaPacientes();
-  guardarPacientesEnLocalStorage()
-  cargarPacientesDesdeLocalStorage();
+  guardarPacientesEnLocalStorage(pacientesEvaluados)
 }
 
 function obtenerFechaActual() {
@@ -114,6 +121,7 @@ function obtenerFechaActual() {
   const dia = fechaActual.getDate();
   const mes = fechaActual.getMonth() + 1;
   const anio = fechaActual.getFullYear();
+  console.log(`${dia}/${mes}/${anio}`)
   return `${dia}/${mes}/${anio}`;
 }
 
