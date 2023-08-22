@@ -71,7 +71,7 @@ cargarPacientesDesdeLocalStorage();
 function evaluarPaciente() {
   var nombre = document.getElementById("nombre").value;
   if (nombre.trim() === "") {
-    alert("Nombre inválido. Por favor, ingrese un nombre válido.");
+    Swal.fire("Error", "Nombre inválido. Por favor, ingrese un nombre válido.", "error");
     return;
   }
   paciente.nombre = nombre;
@@ -80,7 +80,7 @@ function evaluarPaciente() {
   var frecuenciaCardiaca = parseFloat(document.getElementById("frecuenciaCardiaca").value);
 
   if (isNaN(presionArterial) || isNaN(frecuenciaCardiaca)) {
-    alert("Valores inválidos. Ingrese valores numéricos.");
+    Swal.fire("Error", "Valores inválidos. Ingrese valores numéricos.", "error");
     return;
   }
 
