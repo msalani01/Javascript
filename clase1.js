@@ -5,6 +5,8 @@ class Nodo {
   }
 }
 
+
+
 const etapas = [
   "reposo",
   "calentamiento",
@@ -57,12 +59,26 @@ function guardarPacientesEnLocalStorage() {
   localStorage.setItem("pacientesEvaluados", JSON.stringify(pacientesEvaluados));
 }
 
+cargarPacientesDesdeLocalStorage()
+  .then((pacientesCargados) => {
+    pacientesEvaluados.push(...pacientesCargados);
+    actualizarListaPacientes();
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
 // Función para cargar los pacientes evaluados desde el Local Storage
 function cargarPacientesDesdeLocalStorage() {
-  const pacientesGuardados = localStorage.getItem("pacientesEvaluados");
-  if (pacientesGuardados) {
-    pacientesEvaluados.push(...JSON.parse(pacientesGuardados));
-  }
+  return new Promise((resolve, reject) => {
+    const pacientesGuardados = localStorage.getItem("pacientesEvaluados");
+    if (pacientesGuardados) {
+      const pacientesParseados = JSON.parse(pacientesGuardados);
+      resolve(pacientesParseados);
+    } else {
+      reject("No hay pacientes guardados en el localStorage.");
+    }
+  });
 }
 
 localStorage.clear()
@@ -193,3 +209,31 @@ inputTexto.addEventListener("keydown", function(event) {
     evaluarPaciente();
   }
 });
+
+// Obtener una referencia al elemento donde mostrar los datos remotos
+const datosRemotosElement = document.getElementById("datosRemotos");
+
+// URL de la API remota
+const apiURL = "https://jsonplaceholder.typicode.com/posts"; 
+
+// Función para cargar datos remotos utilizando Fetch
+function cargarDatosRemotos() {
+  fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("No se pudieron cargar los datos remotos.");
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Mostrar los datos en el elemento HTML
+      datosRemotosElement.innerHTML = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+      console.error(error);
+      datosRemotosElement.innerHTML = "Error al cargar los datos remotos.";
+    });
+}
+
+// Llamar a la función para cargar los datos remotos
+cargarDatosRemotos();
